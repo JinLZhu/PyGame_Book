@@ -8,7 +8,7 @@ class Dog(pygame.sprite.Sprite):
         image0 = pygame.image.load("dog.png").convert_alpha()
         image1 = pygame.transform.flip(image0, 1, 0)
 
-        self.image = [image0, image1]
+        self.images = [image0, image1]
         self.image_idx = 1
         self.image = image1
 
