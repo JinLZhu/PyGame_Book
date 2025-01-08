@@ -46,10 +46,44 @@ class Game:
                 pass
 
             # update pause/resume button
+
     def update_bullets(self):
         # create bullet:
         # move bullets
         pass
+
+    def update_enemies(self):
+        # create enemy:
+        # move enemies
+        pass
+
+    def handle_collision(self):
+        # check bullets & enemies collision
+        # check hero & enemies collision
+        pass
+
+    def update_screen(self):
+        # draw background
+
+        if self.status.status == Status.WELCOME:
+            # draw logo
+            # draw start button
+            pass
+        elif self.status.status == Status.RUN or self.status.status == Status.PAUSE:
+            # draw hero
+            # draw bullets
+            # draw enemies
+            # draw pause/resume button
+            # draw scoreboard
+            pass
+        elif self.status.status == Status.GAMEOVER:
+            # draw end promt rectangle
+            # draw restart button
+            # draw exit button
+            pass
+
+        # update display surface
+        pygame.display.flip()
 
     def run(self):
         while True:
