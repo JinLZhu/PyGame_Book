@@ -46,7 +46,10 @@ class Game:
                 pass
 
             # update pause/resume button
-
+    def update_bullets(self):
+        # create bullet:
+        # move bullets
+        pass
 
     def run(self):
         while True:
