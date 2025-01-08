@@ -14,6 +14,40 @@ class Game:
         self.clock = pygame.time.Clock()
         self.status = Status()
 
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mousedown_event(event)
+            elif event.type == pygame.MOUSEMOTION:
+                self.handle_mousemotion_event(event)
+
+    def handle_mousedown_event(self, event):
+        if self.status.status == Status.WELCOME:
+            # check and respond start button
+            pass
+        elif self.status.status == Status.RUN:
+            # check and respond run button
+            pass
+        elif self.status.status == Status.PAUSE:
+            # check and respond pause/resume button
+            pass
+        elif self.status.status == Status.GAMEOVER:
+            # check and respond restart button
+            # check and respond exit button
+            pass
+
+    def handle_mousemotion_event(self, event):
+        if self.status.status == Status.RUN:
+            if event.button(0):
+                # update hero
+                pass
+
+            # update pause/resume button
+
+
     def run(self):
         while True:
             self.handle_events()
