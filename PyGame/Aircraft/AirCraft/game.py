@@ -1,5 +1,7 @@
 # 游戏类Game, 对游戏显示和控制起主要作用的类
 import pygame
+
+from PyGame.Aircraft.AirCraft.background import Background
 from status import Status
 
 
@@ -13,6 +15,7 @@ class Game:
         pygame.disply.set_icon(icon)
         self.clock = pygame.time.Clock()
         self.status = Status()
+        self.bg = Background()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -64,6 +67,7 @@ class Game:
 
     def update_screen(self):
         # draw background
+        self.bg.draw(self.surface)
 
         if self.status.status == Status.WELCOME:
             # draw logo
