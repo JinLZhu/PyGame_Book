@@ -1,5 +1,6 @@
 # 游戏类Game, 对游戏显示和控制起主要作用的类
 import pygame
+from hero import Hero
 
 from PyGame.Aircraft.AirCraft.background import Background
 from status import Status
@@ -16,6 +17,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.status = Status()
         self.bg = Background()
+        self.hero = Hero(self.surface.get_rect(), self.status)
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -46,7 +48,7 @@ class Game:
         if self.status.status == Status.RUN:
             if event.button(0):
                 # update hero
-                pass
+                self.hero.update(event.pos)
 
             # update pause/resume button
 
@@ -75,6 +77,7 @@ class Game:
             pass
         elif self.status.status == Status.RUN or self.status.status == Status.PAUSE:
             # draw hero
+            self.hero.draw(self.surface)
             # draw bullets
             # draw enemies
             # draw pause/resume button
@@ -101,3 +104,7 @@ class Game:
                 self.update_screen()
 
                 self.clock.tick(60)
+
+    def reset(self):
+        self.status.reset()
+        self.hero.reset()
