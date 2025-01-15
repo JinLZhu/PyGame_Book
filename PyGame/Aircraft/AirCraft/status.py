@@ -6,6 +6,7 @@ class Status:
     WELCOME, RUN, GAMEOVER, PAUSE = range(4)
 
     def __init__(self):
+        self.status = Status.RUN
         self.status = Status.WELCOME
         self.score = 0
 
