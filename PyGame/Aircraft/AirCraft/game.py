@@ -1,9 +1,11 @@
 # 游戏类Game, 对游戏显示和控制起主要作用的类
 import pygame
 from hero import Hero
+from pygame._sprite import Sprite
 
 from PyGame.Aircraft.AirCraft.background import Background
 from status import Status
+from bullet import Bullet
 
 
 class Game:
@@ -18,6 +20,8 @@ class Game:
         self.status = Status()
         self.bg = Background()
         self.hero = Hero(self.surface.get_rect(), self.status)
+        self.bullets = Group()
+        self.frames = 0
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -55,7 +59,12 @@ class Game:
     def update_bullets(self):
         # create bullet:
         # move bullets
-        pass
+        self.frames += 1
+        if not (self.frames % 5):
+            self.bullets.add(Bullet(self.hero.rect))
+
+        # move bullets
+        self.bullets.update()
 
     def update_enemies(self):
         # create enemy:
@@ -75,14 +84,15 @@ class Game:
             # draw logo
             # draw start button
             pass
-        elif self.status.status == Status.RUN or self.status.status == Status.PAUSE:
+        elif (self.status.status == Status.RUN or self.status.status == Status.PAUSE):
             # draw hero
             self.hero.draw(self.surface)
             # draw bullets
             # draw enemies
             # draw pause/resume button
             # draw scoreboard
-            pass
+            self.bullets.draw(self.surface)
+
         elif self.status.status == Status.GAMEOVER:
             # draw end promt rectangle
             # draw restart button
