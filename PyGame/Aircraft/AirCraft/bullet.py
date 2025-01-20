@@ -17,3 +17,4 @@ class Bullet(Sprite):
         # remove it from the group if outside of the screen
         if self.rect.bottom <= 0:
             self.kill()
+
