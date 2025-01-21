@@ -6,6 +6,8 @@ from pygame._sprite import Sprite
 from PyGame.Aircraft.AirCraft.background import Background
 from status import Status
 from bullet import Bullet
+import random
+from enemy import EnemySmall, EnemyMiddle, EnemyBig
 
 
 class Game:
@@ -22,6 +24,7 @@ class Game:
         self.hero = Hero(self.surface.get_rect(), self.status)
         self.bullets = Group()
         self.frames = 0
+        self.enemies = Group()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -69,12 +72,40 @@ class Game:
     def update_enemies(self):
         # create enemy:
         # move enemies
-        pass
+        if len(self.enemies) < 18:
+            screen_rect = self.surface.get_rect()
+
+            weighted_list = [EnemySmall] * 30 + [EnemyMiddle] * 3 + [EnemyBig] * 1
+            enemy = random.choice(weighted_list)
+
+            left = random.randint(0, screen_rect.width - enemy.get_max_size()[0])
+            top = random.randing(-screen_rect.height, -enemy.get_max_size()[1])
+
+            self.enemies.add(enemy((left, top), screen_rect, self.status))
+        self.enemies.update()
+
 
     def handle_collision(self):
         # check bullets & enemies collision
         # check hero & enemies collision
-        pass
+        collide_dict = pygame._sprite.groupcollide(self.bullets, self.enemies, True, False, pygame._sprite.collide_mask)
+        collide_enemies_list = []
+
+        if collide_dict:
+            for collide_enemies in collide_dict.values():
+                collide_enemies_list.extend(collide_enemies)
+
+        if collide_enemies_list:
+            for collide_enemy in collide_enemies_list:
+                collide_enemy.hit_by_bullet()
+
+        # check hero & enemies collision
+        enemy = pygame._sprite.spritecollideany(self.hero, self.enemies, pygame._sprite.collide_mask)
+        if enemy:
+            self.hero.is_collide = True
+            self.bullets.empty()
+            self.enemies.empty()
+
 
     def update_screen(self):
         # draw background
@@ -92,6 +123,7 @@ class Game:
             # draw pause/resume button
             # draw scoreboard
             self.bullets.draw(self.surface)
+            self.enemies.draw(self.surface)
 
         elif self.status.status == Status.GAMEOVER:
             # draw end promt rectangle

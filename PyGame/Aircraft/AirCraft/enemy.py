@@ -82,3 +82,28 @@ class EnemyMiddle(Enemy):
 
         self.image = self.images[self.image_index]
 
+
+class EnemyBig(Enemy):
+    type = 3
+    max_hp = 25
+    score = 100
+    images = Image.big_enemies
+
+    def update(self):
+        super().update()
+
+        if self.current_hp > 0:
+            if self.is_hit_bullet:
+                self.image_index = 2
+                self.is_hit_bullet = False
+            else:
+                self.image_index = (self.image_index + 1) % 2
+        else:
+            if self.image_index < len(self.images) - 1:
+                self.image_index += 1
+            else:
+                self.kill()
+                self.status.score += self.score
+
+        self.image = self.images[self.image_index]
+
