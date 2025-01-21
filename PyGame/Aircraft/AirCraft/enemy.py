@@ -35,3 +35,50 @@ class Enemy:
         max_height_image = max(cls.images, key=lambda x: x.get_height())
 
         return max_width_image.get_width(), max_height_image.get_height()
+
+
+class EnemySmall(Enemy):
+    type = 1
+    max_hp = 1
+    score = 2
+    image = Image.small_enemies
+
+    def update(self):
+        super().update()
+
+        if self.current_hp > 0:
+            self.image_index = 0
+        else:
+            if self.image_index < len(self.images) - 1:
+                self.image_index += 1
+            else:
+                self.kill()
+                self.status.score += self.score
+
+        self.image = self.images[self.image_index]
+
+
+class EnemyMiddle(Enemy):
+    type = 2
+    max_hp = 10
+    score = 10
+    images = Image.mid_enemies
+
+    def update(self):
+        super().update()
+
+        if self.current_hp > 0:
+            if self.is_hit_bullet:
+                self.image_index = 1
+                self.is_hit_bullet = False
+            else:
+                self.image_index = 0
+        else:
+            if self.image_index < len(self.images) - 1:
+                self.image_index += 1
+            else:
+                self.kill()
+                self.status.score += self.score
+
+        self.image = self.images[self.image_index]
+
