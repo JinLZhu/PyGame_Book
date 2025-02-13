@@ -1,8 +1,9 @@
 # 游戏类Game, 对游戏显示和控制起主要作用的类
 import pygame
+import sys
 from hero import Hero
 from pygame._sprite import Sprite
-
+from button import Button
 from PyGame.Aircraft.AirCraft.background import Background
 from status import Status
 from bullet import Bullet
@@ -25,6 +26,8 @@ class Game:
         self.bullets = Group()
         self.frames = 0
         self.enemies = Group()
+        buttons_name = ["Start", "Restart", "Exit"]
+        self.buttons = {name: Button(self.surface.get_rect(), name) for name in buttons_name}
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -39,7 +42,9 @@ class Game:
     def handle_mousedown_event(self, event):
         if self.status.status == Status.WELCOME:
             # check and respond start button
-            pass
+            if self.buttons["Start"].is_hit(event.pos):
+                self.status.status = Status.RUN
+
         elif self.status.status == Status.RUN:
             # check and respond run button
             pass
@@ -49,7 +54,12 @@ class Game:
         elif self.status.status == Status.GAMEOVER:
             # check and respond restart button
             # check and respond exit button
-            pass
+            if self.buttons["Restart"].is_hit(event.pos):
+                self.reset()
+                self.status.status = Status.RUN
+            elif self.buttons["Exit"].is_hit():
+                pygame.quit()
+                sys.exit()
 
     def handle_mousemotion_event(self, event):
         if self.status.status == Status.RUN:
@@ -114,7 +124,7 @@ class Game:
         if self.status.status == Status.WELCOME:
             # draw logo
             # draw start button
-            pass
+            self.buttons["Start"].draw(self.surface)
         elif (self.status.status == Status.RUN or self.status.status == Status.PAUSE):
             # draw hero
             self.hero.draw(self.surface)
@@ -129,7 +139,8 @@ class Game:
             # draw end promt rectangle
             # draw restart button
             # draw exit button
-            pass
+            self.buttons["Restart"].draw(self.surface)
+            self.buttons["Exit"].draw(self.surface)
 
         # update display surface
         pygame.display.flip()
