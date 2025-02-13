@@ -3,3 +3,33 @@
 # EndPromt类用来显示结束界面上的提示方框
 # Scoreboard类用来显示记分牌
 # PauseResume类用来显示和控制暂停/恢复按钮
+import pygame
+
+from image import Image
+
+
+class Logo:
+    def __init__(self, *args):
+        screen_rect = args[0]
+        self.image = Image.logo
+        self.rect = self.image.get_rect()
+        self.rect.centerx = screen_rect.centerx
+        self.rect.centery = screen_rect.centery - 150
+
+    def draw(self, display_surface):
+        display_surface.blit(self.image, self.rect)
+
+
+class ScoreBoard:
+    def __init__(self, *args):
+        pass
+
+
+class PauseResume:
+    def __init__(self, *args):
+        pass
+
+
+class EndPromt:
+    def __init__(self, *args):
+        pass
