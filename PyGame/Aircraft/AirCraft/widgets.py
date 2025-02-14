@@ -22,7 +22,13 @@ class Logo:
 
 class ScoreBoard:
     def __init__(self, *args):
-        pass
+        self.status = args[1]
+        self.score_color = (0, 0, 0)
+        self.font = pygame.font.Font("res/font/comici.ttf, 35")
+
+    def draw(self, display_surface):
+        score_image = self.font.render(str(self.status.score), True, self.score_color)
+
 
 
 class PauseResume:

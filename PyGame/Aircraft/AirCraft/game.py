@@ -9,6 +9,7 @@ from status import Status
 from bullet import Bullet
 import random
 from enemy import EnemySmall, EnemyMiddle, EnemyBig
+from widgets import Logo, EndPromt, ScoreBoard, PauseResume
 
 
 class Game:
@@ -28,6 +29,8 @@ class Game:
         self.enemies = Group()
         buttons_name = ["Start", "Restart", "Exit"]
         self.buttons = {name: Button(self.surface.get_rect(), name) for name in buttons_name}
+        widgets_name = ["Logo", "EndPromt", "Scoreboard", "PauseResume"]
+        self.widgets = {name: eval(name)(self.surface.get_rect(), self.status) for name in widgets_name}
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -125,6 +128,7 @@ class Game:
             # draw logo
             # draw start button
             self.buttons["Start"].draw(self.surface)
+            self.widgets["Logo"].draw(self.surface)
         elif (self.status.status == Status.RUN or self.status.status == Status.PAUSE):
             # draw hero
             self.hero.draw(self.surface)
@@ -134,6 +138,7 @@ class Game:
             # draw scoreboard
             self.bullets.draw(self.surface)
             self.enemies.draw(self.surface)
+            self.widgets["Scoreboard"].draw(self.surface)
 
         elif self.status.status == Status.GAMEOVER:
             # draw end promt rectangle
