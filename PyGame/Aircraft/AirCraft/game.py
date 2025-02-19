@@ -50,10 +50,16 @@ class Game:
 
         elif self.status.status == Status.RUN:
             # check and respond run button
-            pass
+            if self.widgets["PauseResume"].is_hit(event.pos):
+                self.widgets["PauseResume"].update_click()
+                self.status.status = Status.PAUSE
+
         elif self.status.status == Status.PAUSE:
             # check and respond pause/resume button
-            pass
+            if self.widgets["PauseResume"].is_hit(event.pos):
+                self.widgets["PauseResume"].update_click()
+                self.status.status = Status.RUN
+
         elif self.status.status == Status.GAMEOVER:
             # check and respond restart button
             # check and respond exit button
@@ -69,6 +75,9 @@ class Game:
             if event.button(0):
                 # update hero
                 self.hero.update(event.pos)
+                self.widgets["PauseResume"].update_mouse_motion(event.pos)
+            elif self.status.status == Status.PAUSE:
+                self.widgets["PauseResume"].update_mouse_motion(event.pos)
 
             # update pause/resume button
 
@@ -140,6 +149,7 @@ class Game:
             self.bullets.draw(self.surface)
             self.enemies.draw(self.surface)
             self.widgets["Scoreboard"].draw(self.surface)
+            self.widgets["PauseResume"].draw(self.surface)
 
         elif self.status.status == Status.GAMEOVER:
             # draw end promt rectangle
@@ -167,3 +177,5 @@ class Game:
     def reset(self):
         self.status.reset()
         self.hero.reset()
+        self.widgets["PauseResume"].reset()
+
