@@ -74,4 +74,39 @@ class PauseResume:
 
 class EndPromt:
     def __init__(self, *args):
-        pass
+        screen_rect = args[0]
+        self.status = args[1]
+
+        # outside border
+        self.border_color = (96, 96, 96)
+        self.border_rect = pygame.Rect(0, 0, 350, 300)
+        self.border_rect.centerx = screen_rect.centerx
+        self.border_rect.centery = screen_rect.centery + 40
+
+        # score
+        self.score_color = self.border_color
+        self.font = pygame.font.SysFont(None, 40)
+
+        # score text
+        self.score_text_image = self.font.render("Score: ", True, self.score_color)
+        self.score_text_top = self.border_rect.top + 30
+        self.score_text_left = self.border_rect + 30
+
+        # score number
+        self.update_score_num()
+
+    def update_score_num(self):
+        self.socre_num_image = self.font.render(str(self.status.score), True, self.score_color)
+        self.socre_num_rect = self.score_num_image.get_rect()
+        self.socre_num_rect.centerx = self.border_rect.centerx
+        self.score_num_rect.centery = self.border_rect.top + 80
+
+    def draw(self, display_surface):
+        # draw border
+        pygame.draw.rect(display_surface, self.border_color, self.border_rect, 3)
+
+        # draw socre text
+        display_surface.blit(self.score_text_image, (self.score_text_left,self.score_text_top))
+
+        # draw score number
+        display_surface.blit(self.score_num_image, self.score_num_rect)

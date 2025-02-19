@@ -10,6 +10,7 @@ from bullet import Bullet
 import random
 from enemy import EnemySmall, EnemyMiddle, EnemyBig
 from widgets import Logo, EndPromt, ScoreBoard, PauseResume
+from sound import Sound
 
 
 class Game:
@@ -19,6 +20,9 @@ class Game:
         pygame.display.set_caption("AirCraft")
 
         icon = pygame.image.load("res/image/icon.ico")
+
+        self.sounds = Sound()
+
         pygame.disply.set_icon(icon)
         self.clock = pygame.time.Clock()
         self.status = Status()
@@ -46,6 +50,7 @@ class Game:
         if self.status.status == Status.WELCOME:
             # check and respond start button
             if self.buttons["Start"].is_hit(event.pos):
+                self.sounds.play("bg")
                 self.status.status = Status.RUN
 
         elif self.status.status == Status.RUN:
@@ -53,16 +58,19 @@ class Game:
             if self.widgets["PauseResume"].is_hit(event.pos):
                 self.widgets["PauseResume"].update_click()
                 self.status.status = Status.PAUSE
+                self.sounds.play("bg")
 
         elif self.status.status == Status.PAUSE:
             # check and respond pause/resume button
             if self.widgets["PauseResume"].is_hit(event.pos):
                 self.widgets["PauseResume"].update_click()
                 self.status.status = Status.RUN
+                self.sounds.play("bg")
 
         elif self.status.status == Status.GAMEOVER:
             # check and respond restart button
             # check and respond exit button
+            self.sounds.play("bg")
             if self.buttons["Restart"].is_hit(event.pos):
                 self.reset()
                 self.status.status = Status.RUN
@@ -87,6 +95,7 @@ class Game:
         self.frames += 1
         if not (self.frames % 5):
             self.bullets.add(Bullet(self.hero.rect))
+            self.sounds.play("bullet")
 
         # move bullets
         self.bullets.update()
@@ -119,6 +128,9 @@ class Game:
 
         if collide_enemies_list:
             for collide_enemy in collide_enemies_list:
+                if collide_enemy.current_hp == 1:
+                    self.sounds.play("enemy" + str(collide_enemy.type) + "_down")
+
                 collide_enemy.hit_by_bullet()
 
         # check hero & enemies collision
@@ -127,6 +139,9 @@ class Game:
             self.hero.is_collide = True
             self.bullets.empty()
             self.enemies.empty()
+            self.widgets["EndPrompt"].update_score_num()
+            self.sounds.fadeout("bg")
+            self.sounds.play("game_over")
 
 
     def update_screen(self):
@@ -155,6 +170,7 @@ class Game:
             # draw end promt rectangle
             # draw restart button
             # draw exit button
+            self.widgets["EndPrompt"].draw(self.surface)
             self.buttons["Restart"].draw(self.surface)
             self.buttons["Exit"].draw(self.surface)
 
