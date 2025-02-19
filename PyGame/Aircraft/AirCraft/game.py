@@ -129,6 +129,7 @@ class Game:
             # draw start button
             self.buttons["Start"].draw(self.surface)
             self.widgets["Logo"].draw(self.surface)
+
         elif (self.status.status == Status.RUN or self.status.status == Status.PAUSE):
             # draw hero
             self.hero.draw(self.surface)

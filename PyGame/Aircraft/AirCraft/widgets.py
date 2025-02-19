@@ -24,7 +24,7 @@ class ScoreBoard:
     def __init__(self, *args):
         self.status = args[1]
         self.score_color = (0, 0, 0)
-        self.font = pygame.font.Font("res/font/comici.ttf, 35")
+        self.font = pygame.font.Font("res/font/comici.ttf", 35)
 
     def draw(self, display_surface):
         score_image = self.font.render(str(self.status.score), True, self.score_color)
@@ -32,8 +32,44 @@ class ScoreBoard:
 
 
 class PauseResume:
+    # Pause and resume status
+    PAUSE_NORMAL, PAUSE_PASSED, RESUME_NORMAL, RESUME_PRESSED = range(4)
+
     def __init__(self, *args):
-        pass
+        self.images = Image.pause_resume
+        self.status = PauseResume.PAUSE_NORMAL
+
+        self.rect = self.images[self.status].get_rect()
+        self.rect.topleft = (0, 5)
+
+    def reset(self):
+        self.status = PauseResume.PAUSE_NORMAL
+
+    def draw(self, display_surface):
+        display_surface.blit(self.images[self.status], self.rect)
+
+    def is_hit(self, pos):
+        return self.rect.collidepoint(pos)
+
+    def update_click(self):
+        if self.status == PauseResume.PAUSE_NORMAL or self.status == PauseResume.PAUSE_PASSED:
+            self.status == PauseResume.RESUME_NORMAL
+        else:
+            self.status == PauseResume.PAUSE_NORMAL
+
+    def update_mouse_motion(self, pos):
+        is_mouse_on = self.is_hit(pos)
+
+        if is_mouse_on:
+            if self.status == PauseResume.PAUSE_NORMAL:
+                self.status = PauseResume.PAUSE_PASSED
+            elif self.status == PauseResume.RESUME_NORMAL:
+                self.status = PauseResume.RESUME_PRESSED
+        else:
+            if self.status == PauseResume.PAUSE_PASSED:
+                self.status = PauseResume.PAUSE_NORMAL
+            elif self.status == PauseResume.RESUME_PRESSED:
+                self.status = PauseResume.RESUME_NORMAL
 
 
 class EndPromt:
