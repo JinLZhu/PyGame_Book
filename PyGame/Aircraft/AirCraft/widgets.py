@@ -24,7 +24,11 @@ class ScoreBoard:
     def __init__(self, *args):
         self.status = args[1]
         self.score_color = (0, 0, 0)
-        self.font = pygame.font.Font("res/font/comici.ttf", 35)
+        try:
+            self.font = pygame.font.Font("res/font/comici.ttf", 35)
+        except Exception as e:
+            print(e)
+            self.font = pygame.font.SysFont(None, 50)
 
     def draw(self, display_surface):
         score_image = self.font.render(str(self.status.score), True, self.score_color)

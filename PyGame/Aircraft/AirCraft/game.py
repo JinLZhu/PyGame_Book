@@ -19,11 +19,15 @@ class Game:
         self.surface = pygame.display.set_mode((480, 852))
         pygame.display.set_caption("AirCraft")
 
-        icon = pygame.image.load("res/image/icon.ico")
+        try:
+            icon = pygame.image.load("res/image/icon.ico")
+        except pygame.error:
+            pass
+        else:
+            pygame.disply.set_icon(icon)
 
         self.sounds = Sound()
 
-        pygame.disply.set_icon(icon)
         self.clock = pygame.time.Clock()
         self.status = Status()
         self.bg = Background()
