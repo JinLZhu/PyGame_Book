@@ -6,9 +6,9 @@ from image import Image
 
 
 class Hero:
-    def __init__(self, ):
+    def __init__(self, screen_rect, status):
         self.screen_rect = screen_rect
-        self.status = statistics
+        self.status = status
 
         self.images = Image.heros
         self.image = self.images[0]
@@ -31,7 +31,7 @@ class Hero:
         else:
             self.image_index = not self.image_index
 
-        self.image = self.images(self.image_index)
+        self.image = self.images[self.image_index]
 
         display_surface.blit(self.image, self.rect)
 

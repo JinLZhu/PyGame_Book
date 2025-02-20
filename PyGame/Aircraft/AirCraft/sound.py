@@ -36,7 +36,7 @@ class Sound:
 
         for sound in sounds_name:
             try:
-                self.sounds[sound] = pygame.mixer.Sound(sound.join(["res/sound]", ".wav"]))
+                self.sounds[sound] = pygame.mixer.Sound(sound.join(["./res/sound/", ".wav"]))
             except pygame.error as e:
                 print(e)
 

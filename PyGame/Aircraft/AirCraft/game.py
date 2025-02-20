@@ -2,9 +2,9 @@
 import pygame
 import sys
 from hero import Hero
-from pygame._sprite import Sprite
+from pygame._sprite import Group
 from button import Button
-from PyGame.Aircraft.AirCraft.background import Background
+from background import Background
 from status import Status
 from bullet import Bullet
 import random
@@ -24,7 +24,7 @@ class Game:
         except pygame.error:
             pass
         else:
-            pygame.disply.set_icon(icon)
+            pygame.display.set_icon(icon)
 
         self.sounds = Sound()
 
@@ -37,7 +37,7 @@ class Game:
         self.enemies = Group()
         buttons_name = ["Start", "Restart", "Exit"]
         self.buttons = {name: Button(self.surface.get_rect(), name) for name in buttons_name}
-        widgets_name = ["Logo", "EndPromt", "Scoreboard", "PauseResume"]
+        widgets_name = ["Logo", "EndPromt", "ScoreBoard", "PauseResume"]
         self.widgets = {name: eval(name)(self.surface.get_rect(), self.status) for name in widgets_name}
 
     def handle_events(self):
@@ -84,11 +84,10 @@ class Game:
 
     def handle_mousemotion_event(self, event):
         if self.status.status == Status.RUN:
-            if event.button(0):
+            if pygame.mouse.get_pressed()[0]:
                 # update hero
                 self.hero.update(event.pos)
-                self.widgets["PauseResume"].update_mouse_motion(event.pos)
-            elif self.status.status == Status.PAUSE:
+            if self.status.status in [Status.PAUSE, Status.RUN]:
                 self.widgets["PauseResume"].update_mouse_motion(event.pos)
 
             # update pause/resume button
@@ -114,9 +113,10 @@ class Game:
             enemy = random.choice(weighted_list)
 
             left = random.randint(0, screen_rect.width - enemy.get_max_size()[0])
-            top = random.randing(-screen_rect.height, -enemy.get_max_size()[1])
+            top = random.randint(-screen_rect.height, -enemy.get_max_size()[1])
 
             self.enemies.add(enemy((left, top), screen_rect, self.status))
+
         self.enemies.update()
 
 
@@ -143,7 +143,7 @@ class Game:
             self.hero.is_collide = True
             self.bullets.empty()
             self.enemies.empty()
-            self.widgets["EndPrompt"].update_score_num()
+            self.widgets["EndPromt"].update_score_num()
             self.sounds.fadeout("bg")
             self.sounds.play("game_over")
 
@@ -158,7 +158,7 @@ class Game:
             self.buttons["Start"].draw(self.surface)
             self.widgets["Logo"].draw(self.surface)
 
-        elif (self.status.status == Status.RUN or self.status.status == Status.PAUSE):
+        elif self.status.status == Status.RUN or self.status.status == Status.PAUSE:
             # draw hero
             self.hero.draw(self.surface)
             # draw bullets
@@ -167,18 +167,19 @@ class Game:
             # draw scoreboard
             self.bullets.draw(self.surface)
             self.enemies.draw(self.surface)
-            self.widgets["Scoreboard"].draw(self.surface)
+            self.widgets["ScoreBoard"].draw(self.surface)
             self.widgets["PauseResume"].draw(self.surface)
 
         elif self.status.status == Status.GAMEOVER:
             # draw end promt rectangle
             # draw restart button
             # draw exit button
-            self.widgets["EndPrompt"].draw(self.surface)
+            self.widgets["EndPromt"].draw(self.surface)
             self.buttons["Restart"].draw(self.surface)
             self.buttons["Exit"].draw(self.surface)
 
         # update display surface
+        pygame.display.update()
         pygame.display.flip()
 
     def run(self):
@@ -190,9 +191,11 @@ class Game:
                 self.update_bullets()
                 self.update_enemies()
                 self.handle_collision()
-                self.update_screen()
 
-                self.clock.tick(60)
+            self.update_screen()
+
+            self.clock.tick(60)
+
 
     def reset(self):
         self.status.reset()

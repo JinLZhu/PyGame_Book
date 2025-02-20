@@ -1,10 +1,11 @@
 # 敌人相关类，Enemy / EnemySmall / EnemyMiddle / EnemyBig /
 # Enemy 是其余三个的基类
 import pygame
-from pygame._sprite import Sprite
+from pygame.sprite import Sprite
+from image import Image
 
 
-class Enemy:
+class Enemy(Sprite):
     def __init__(self, topleft, screen_rect, status):
         super().__init__()
 
@@ -15,7 +16,7 @@ class Enemy:
         self.mask = pygame.mask.from_surface(self.image)
 
         self.rect = pygame.Rect(topleft, self.get_max_size())
-        self.current_hp = help.max_hp
+        self.current_hp = self.max_hp
         self.is_hit_bullet = False
 
     def update(self):
@@ -41,7 +42,7 @@ class EnemySmall(Enemy):
     type = 1
     max_hp = 1
     score = 2
-    image = Image.small_enemies
+    images = Image.small_enemies
 
     def update(self):
         super().update()

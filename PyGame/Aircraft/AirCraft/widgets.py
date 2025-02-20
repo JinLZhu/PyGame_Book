@@ -94,15 +94,15 @@ class EndPromt:
         # score text
         self.score_text_image = self.font.render("Score: ", True, self.score_color)
         self.score_text_top = self.border_rect.top + 30
-        self.score_text_left = self.border_rect + 30
+        self.score_text_left = self.border_rect.left + 30
 
         # score number
         self.update_score_num()
 
     def update_score_num(self):
-        self.socre_num_image = self.font.render(str(self.status.score), True, self.score_color)
-        self.socre_num_rect = self.score_num_image.get_rect()
-        self.socre_num_rect.centerx = self.border_rect.centerx
+        self.score_num_image = self.font.render(str(self.status.score), True, self.score_color)
+        self.score_num_rect = self.score_num_image.get_rect()
+        self.score_num_rect.centerx = self.border_rect.centerx
         self.score_num_rect.centery = self.border_rect.top + 80
 
     def draw(self, display_surface):
